@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.full_name }} - StudentsMart Profile</title>
+    <link rel="icon" href="https://i.ibb.co/1YBpx2KS/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #64748b;
+            --accent: #0ea5e9;
+            --dark: #0f172a;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-700: #334155;
+            --gray-800: #1e293b;
+            --white: #ffffff;
+            --success: #10b981;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--gray-50);
+            color: var(--dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark);
+        }
+
+        .logo {
+            height: 36px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.625rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: var(--gray-100);
+            color: var(--dark);
+        }
+
+        .btn-nav {
+            padding: 0.625rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid transparent;
+        }
+
+        .btn-nav-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-nav-primary:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .btn-nav-secondary {
+            background: var(--gray-100);
+            color: var(--dark);
+        }
+
+        .btn-nav-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        /* Hero Section */
+        .profile-hero {
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .hero-content {
+            display: flex;
+            gap: 2.5rem;
+            align-items: flex-start;
+        }
+
+        .profile-image-wrapper {
+            flex-shrink: 0;
+        }
+
+        .profile-image {
+            width: 160px;
+            height: 160px;
+            border-radius: 12px;
+            background: var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary);
+            border: 2px solid var(--border);
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .profile-headline {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+
+        .profile-meta-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-700);
+            font-size: 0.95rem;
+        }
+
+        .meta-item i {
+            color: var(--gray-600);
+            width: 18px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--gray-100);
+            color: var(--gray-700);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border);
+        }
+
+        .social-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 2rem;
+        }
+
+        /* Sections */
+        .section {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--gray-100);
+            color: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            letter-spacing: -0.025em;
+        }
+
+        /* About Section */
+        .about-text {
+            color: var(--gray-700);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* Skills */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.625rem;
+        }
+
+        .skill-tag {
+            padding: 0.5rem 1rem;
+            background: var(--gray-100);
+            color: var(--gray-800);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .skill-tag:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+
+        /* Experience Timeline */
+        .timeline {
+            position: relative;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 2rem;
+            border-left: 2px solid var(--border);
+        }
+
+        .timeline-item:last-child {
+            border-left: 2px solid transparent;
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -6px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 2px solid var(--white);
+            box-shadow: 0 0 0 2px var(--border);
+        }
+
+        .timeline-content {
+            padding-left: 0.75rem;
+        }
+
+        .timeline-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-company {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-date {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .timeline-description {
+            color: var(--gray-700);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Education */
+        .education-item {
+            padding: 1.25rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .education-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .education-degree {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.375rem;
+        }
+
+        .education-institution {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .education-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .education-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        /* Certifications */
+        .cert-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .cert-item {
+            padding: 1.25rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .cert-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .cert-name {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.375rem;
+            font-size: 1rem;
+        }
+
+        .cert-issuer {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 0.375rem;
+        }
+
+        .cert-date {
+            color: var(--gray-600);
+            font-size: 0.85rem;
+        }
+
+        .cert-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+
+        .cert-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Projects */
+        .project-item {
+            padding: 1.25rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+        }
+
+        .project-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .project-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.375rem;
+        }
+
+        .project-org {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .project-description {
+            color: var(--gray-700);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .project-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 90px;
+            align-self: start;
+        }
+
+        /* CTA Card */
+        .cta-card {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .cta-text {
+            opacity: 0.95;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-cta {
+            background: white;
+            color: var(--primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            color: var(--primary);
+        }
+
+        /* Info Card */
+        .info-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .info-card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list i {
+            width: 18px;
+            color: var(--gray-600);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--gray-600);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gray-400);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .profile-name {
+                font-size: 2rem;
+            }
+
+            .profile-headline {
+                font-size: 1.125rem;
+            }
+
+            .profile-meta-list {
+                justify-content: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 0.25rem;
+            }
+
+            .nav-link {
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
+            }
+
+            .btn-nav {
+                padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="navbar-brand" href="/">
+                <img src="https://i.ibb.co/Z05RbY8/logo-removebg-preview-5.png" alt="StudentsMart" class="logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/internships" class="btn-nav btn-nav-secondary"><i class="fas fa-briefcase"></i> Internships</a></li>
+                <li><a href="/companies" class="btn-nav btn-nav-primary"><i class="fas fa-building"></i> Companies</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="profile-hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="profile-image-wrapper">
+                    <div class="profile-image">
+                        {% if user.profile_picture %}
+                            <img src="{{ user.profile_picture }}" alt="{{ user.full_name }}">
+                        {% else %}
+                            {{ user.full_name[0] }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <h1 class="profile-name">{{ user.full_name }}</h1>
+                    <p class="profile-headline">{{ profile.headline or 'Student at ' + user.college }}</p>
+                    
+                    <div class="profile-meta-list">
+                        <div class="meta-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>{{ user.college }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-code-branch"></i>
+                            <span>{{ user.department }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ user.year }}{{ 'st' if user.year == 1 else 'nd' if user.year == 2 else 'rd' if user.year == 3 else 'th' }} Year</span>
+                        </div>
+                    </div>
+
+                    {% if profile.linkedin or profile.github or profile.portfolio or profile.leetcode %}
+                    <div class="social-links">
+                        {% if profile.linkedin %}
+                        <a href="{{ profile.linkedin }}" target="_blank" class="social-btn" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        {% endif %}
+                        {% if profile.github %}
+                        <a href="{{ profile.github }}" target="_blank" class="social-btn" title="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        {% endif %}
+                        {% if profile.portfolio %}
+                        <a href="{{ profile.portfolio }}" target="_blank" class="social-btn" title="Portfolio">
+                            <i class="fas fa-globe"></i>
+                        </a>
+                        {% endif %}
+                        {% if profile.leetcode %}
+                        <a href="{{ profile.leetcode }}" target="_blank" class="social-btn" title="LeetCode">
+                            <i class="fas fa-code"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-grid">
+            <div class="main-column">
+                <!-- About Section -->
+                {% if profile.bio %}
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 class="section-title">About</h2>
+                    </div>
+                    <p class="about-text">{{ profile.bio }}</p>
+                </section>
+                {% endif %}
+
+                <!-- Work Experience -->
+                {% if profile.work_experiences %}
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <h2 class="section-title">Experience</h2>
+                    </div>
+                    <div class="timeline">
+                        {% for exp in profile.work_experiences %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h3 class="timeline-title">{{ exp.role }}</h3>
+                                <div class="timeline-company">{{ exp.company }}</div>
+                                <div class="timeline-date">
+                                    <i class="fas fa-calendar"></i>
+                                    {{ exp.duration_start.strftime('%b %Y') }} - 
+                                    {% if exp.currently_working %}
+                                        Present
+                                    {% else %}
+                                        {{ exp.duration_end.strftime('%b %Y') if exp.duration_end else 'Present' }}
+                                    {% endif %}
+                                </div>
+                                {% if exp.description %}
+                                <p class="timeline-description">{{ exp.description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+
+                <!-- Education -->
+                {% if profile.educations %}
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h2 class="section-title">Education</h2>
+                    </div>
+                    {% for edu in profile.educations %}
+                    <div class="education-item">
+                        <h3 class="education-degree">{{ edu.degree }}</h3>
+                        <div class="education-institution">{{ edu.institution }}</div>
+                        <div class="education-meta">
+                            {% if edu.field_of_study %}
+                            <span class="education-meta-item">
+                                <i class="fas fa-book"></i>
+                                {{ edu.field_of_study }}
+                            </span>
+                            {% endif %}
+                            {% if edu.cgpa %}
+                            <span class="education-meta-item">
+                                <i class="fas fa-award"></i>
+                                CGPA: {{ edu.cgpa }}/{{ edu.cgpa_scale }}
+                            </span>
+                            {% endif %}
+                            <span class="education-meta-item">
+                                <i class="fas fa-calendar"></i>
+                                {{ edu.year_start }} - {{ edu.year_end or 'Present' }}
+                            </span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </section>
+                {% endif %}
+
+                <!-- Projects & Activities -->
+                {% if profile.extracurricular_activities %}
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <h2 class="section-title">Projects & Activities</h2>
+                    </div>
+                    {% for activity in profile.extracurricular_activities %}
+                    <div class="project-item">
+                        <h3 class="project-title">{{ activity.title }}</h3>
+                        {% if activity.organization %}
+                        <div class="project-org">{{ activity.organization }}</div>
+                        {% endif %}
+                        {% if activity.description %}
+                        <p class="project-description">{{ activity.description }}</p>
+                        {% endif %}
+                        {% if activity.link %}
+                        <a href="{{ activity.link }}" target="_blank" class="project-link">
+                            View Project <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </section>
+                {% endif %}
+
+                <!-- Certifications -->
+                {% if profile.certifications %}
+                <section class="section">
+                    <div class="section-header">
+                        <div class="section-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h2 class="section-title">Certifications</h2>
+                    </div>
+                    <div class="cert-grid">
+                        {% for cert in profile.certifications %}
+                        <div class="cert-item">
+                            <h3 class="cert-name">{{ cert.name }}</h3>
+                            <div class="cert-issuer">{{ cert.issuer }}</div>
+                            <div class="cert-date">
+                                {{ cert.issue_date.strftime('%b %Y') if cert.issue_date else 'Date not specified' }}
+                            </div>
+                            {% if cert.credential_url %}
+                            <a href="{{ cert.credential_url }}" target="_blank" class="cert-link">
+                                View Certificate <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+                {% endif %}
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- CTA Card -->
+                <div class="cta-card">
+                    <h3 class="cta-title">Hire {{ user.full_name.split()[0] }}</h3>
+                    <p class="cta-text">Post internships and connect with talented students</p>
+                    <a href="/companies" class="btn-cta">
+                        <i class="fas fa-building"></i>
+                        Post a Job
+                    </a>
+                </div>
+
+                <!-- Skills Card -->
+                {% if profile.skills %}
+                <div class="info-card">
+                    <h3 class="info-card-title">Skills</h3>
+                    <div class="skills-container">
+                        {% for skill in profile.skills %}
+                        <span class="skill-tag">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </aside>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Internships - StudentsMart</title>
+    <link rel="icon" href="https://i.ibb.co/1YBpx2KS/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEC9;
+            --accent: #FD79A8;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --white: #FFFFFF;
+            --success: #00B894;
+            --warning: #FDCB6E;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Navbar Styles from index.html */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo-container img.logo {
+            height: 42px;
+            transition: var(--transition);
+        }
+
+        .navbar-brand:hover .logo {
+            transform: rotate(8deg) scale(1.1);
+        }
+
+        .btn-nav-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-nav-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggler-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .navbar-toggler-icon span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #8B7CE9 50%, var(--accent) 100%);
+            color: white;
+            padding: 4rem 0 5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .page-header h1 i {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            opacity: 0.95;
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        /* Filters Sidebar */
+        .filters-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(108, 92, 231, 0.1);
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 100px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filters-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .filter-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-title i {
+            color: var(--primary);
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .filter-group .form-control,
+        .filter-group .form-select {
+            border-radius: 10px;
+            border: 2px solid rgba(108, 92, 231, 0.15);
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .filter-group .form-control:focus,
+        .filter-group .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.15);
+        }
+
+        /* Job Cards */
+        .job-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .job-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(108, 92, 231, 0.2);
+            border-color: rgba(108, 92, 231, 0.3);
+        }
+
+        .job-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .company-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 3px solid rgba(108, 92, 231, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .job-card:hover .company-logo {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .job-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .job-card:hover .job-title {
+            color: var(--primary);
+        }
+
+        .company-name {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .company-name i {
+            font-size: 0.9rem;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .meta-item i {
+            color: var(--primary);
+        }
+
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .tag {
+            background: var(--light);
+            color: var(--dark);
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tag.primary {
+            background: rgba(108, 92, 231, 0.15);
+            color: var(--primary);
+            border-color: rgba(108, 92, 231, 0.3);
+            font-weight: 600;
+        }
+
+        .stipend {
+            font-size: 1.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--success), #00d4a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-apply {
+            background: linear-gradient(135deg, var(--primary), #8B7CE9);
+            color: white;
+            border: none;
+            padding: 0.85rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-apply::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-apply:hover::before {
+            left: 100%;
+        }
+
+        .btn-apply:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-apply.applied {
+            background: linear-gradient(135deg, var(--success), #00d4a1);
+            cursor: not-allowed;
+            box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3);
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .no-jobs {
+            text-align: center;
+            padding: 3rem;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .no-jobs i {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .filter-badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+
+        .clear-filters {
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .stats-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(108, 92, 231, 0.1);
+        }
+
+        .stats-bar .stat {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1.05rem;
+        }
+
+        .stats-bar .stat i {
+            color: var(--primary);
+        }
+
+        .stats-bar .form-select {
+            border-radius: 10px;
+            border: 2px solid rgba(108, 92, 231, 0.15);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stats-bar .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .filters-card {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar - Exact from index.html -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="/" style="flex-grow: 1; max-width: 400px;">
+                <div class="logo-container">
+                    <img src="https://i.ibb.co/Z05RbY8/logo-removebg-preview-5.png"
+                        alt="StudentsMart - Learn.Sell.Repeat"
+                        class="logo">
+                </div>
+            </a>
+
+            <!-- Modern Hamburger Button -->
+            <button class="navbar-toggler" type="button" onclick="toggleMobileMenu()">
+                <div class="navbar-toggler-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+
+            <!-- Navigation Menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Internships Button -->
+                <li class="nav-item">
+                    <a class="nav-link btn-nav-box" href="/internships" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(108, 92, 231, 0.1); color: var(--primary); border-radius: 8px; font-weight: 600; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Internships</span>
+                    </a>
+                </li>
+
+                <!-- Companies Button -->
+                <li class="nav-item">
+                    <a class="nav-link btn-nav-box" href="/companies" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(0, 206, 201, 0.1); color: var(--secondary); border-radius: 8px; font-weight: 600; transition: all 0.3s ease; border: 2px solid transparent;">
+                        <i class="fas fa-building"></i>
+                        <span>Companies</span>
+                    </a>
+                </li>
+
+                <!-- Navigation Items -->
+                <ul class="navbar-nav ms-auto">
+                    <!-- Admin Menu (Hidden by default) -->
+                    <li class="nav-item dropdown d-none" id="adminMenu">
+                        <a class="nav-link" href="#" onclick="showAdminDashboard()">
+                            <i class="fas fa-tools me-2"></i>Admin Dashboard
+                        </a>
+                    </li>
+
+                    <!-- Reports Menu (Hidden by default) -->
+                    <li class="nav-item d-none" id="reportsMenu">
+                        <a class="nav-link" href="#" onclick="showAdminDashboard('reports')">
+                            <i class="fas fa-flag me-2"></i>Reports
+                            <span class="badge bg-danger" id="navReportsBadge">0</span>
+                        </a>
+                    </li>
+
+                    <!-- Auth Buttons (Shown when logged out - Desktop only) -->
+                    <li class="nav-item" id="authButtons">
+                        <button class="btn btn-outline-primary me-2" onclick="showLoginModal()">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </button>
+                    </li>
+
+                    <!-- Notifications Menu (Hidden by default) -->
+                    <li class="nav-item d-none" id="notificationMenu">
+                        <a class="nav-link position-relative" href="/notifications">
+                            <i class="fas fa-bell"></i>
+                            <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
+                                0
+                            </span>
+                            Notifications
+                        </a>
+                    </li>
+
+                    <!-- User Menu Dropdown (Hidden by default - Shown when logged in) -->
+                    <li class="nav-item dropdown d-none" id="userMenu">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i><span id="userName"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/student-dashboard">
+                                <i class="fas fa-clipboard-list me-2"></i>My Applications
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="viewMyPublicProfile()">
+                                <i class="fas fa-eye me-2"></i>View Public Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="/internships/edit-profile">
+                                <i class="fas fa-user-edit me-2"></i>Edit Profile
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-briefcase me-3"></i>Browse Internships</h1>
+            <p>Find your perfect internship opportunity</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Filters Sidebar -->
+            <div class="col-lg-3">
+                <div class="filters-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="filter-title mb-0">
+                            <i class="fas fa-filter me-2"></i>Filters
+                            <span class="filter-badge" id="activeFiltersCount" style="display: none;">0</span>
+                        </h5>
+                        <span class="clear-filters" onclick="clearFilters()" style="display: none;" id="clearFiltersBtn">Clear</span>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Job Type</label>
+                        <select class="form-select" id="jobTypeFilter" onchange="applyFilters()">
+                            <option value="">All Types</option>
+                            <option value="Internship">Internship</option>
+                            <option value="Full-time">Full-time</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Location</label>
+                        <input type="text" class="form-control" id="locationFilter" placeholder="Enter location" onkeyup="applyFilters()">
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Skills</label>
+                        <input type="text" class="form-control" id="skillsFilter" placeholder="e.g., Python, React" onkeyup="applyFilters()">
+                        <small class="text-muted">Comma separated</small>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Work Mode</label>
+                        <select class="form-select" id="workModeFilter" onchange="applyFilters()">
+                            <option value="">All Modes</option>
+                            <option value="Remote">Remote</option>
+                            <option value="On-site">On-site</option>
+                            <option value="Hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job Listings -->
+            <div class="col-lg-9">
+                <!-- Stats Bar -->
+                <div class="stats-bar">
+                    <div class="stat">
+                        <i class="fas fa-briefcase text-primary me-2"></i>
+                        <span id="jobCount">0</span> Opportunities Found
+                    </div>
+                    <div>
+                        <select class="form-select form-select-sm" id="sortFilter" onchange="applyFilters()">
+                            <option value="latest">Latest First</option>
+                            <option value="stipend_high">Highest Stipend</option>
+                            <option value="stipend_low">Lowest Stipend</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div class="loading-spinner" id="loadingSpinner">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Loading internships...</p>
+                </div>
+
+                <!-- Jobs Container -->
+                <div id="jobsContainer"></div>
+
+                <!-- No Jobs Message -->
+                <div class="no-jobs" id="noJobsMessage" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <h4>No internships found</h4>
+                    <p class="text-muted">Try adjusting your filters to see more results</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allJobs = [];
+        let appliedJobs = new Set();
+
+        // Load jobs on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            loadJobs();
+            loadMyApplications();
+        });
+
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/check-session');
+                const data = await response.json();
+
+                if (data.authenticated) {
+                    // Hide auth buttons, show user menu
+                    document.getElementById('authButtons').classList.add('d-none');
+                    document.getElementById('userMenu').classList.remove('d-none');
+
+                    // Set user name
+                    document.getElementById('userName').textContent = data.user.full_name;
+                    window.publicProfileSlug = data.user.public_profile_slug;
+
+                    // Show admin menu if user is admin
+                    if (data.user.is_admin) {
+                        document.getElementById('adminMenu').classList.remove('d-none');
+                        document.getElementById('reportsMenu').classList.remove('d-none');
+                    }
+                } else {
+                    // Show auth buttons, hide user menu
+                    document.getElementById('authButtons').classList.remove('d-none');
+                    document.getElementById('userMenu').classList.add('d-none');
+                }
+            } catch (error) {
+                console.error('Error loading user info:', error);
+            }
+        }
+
+        function toggleMobileMenu() {
+            const navbarCollapse = document.getElementById('navbarNav');
+            navbarCollapse.classList.toggle('show');
+        }
+
+        function showLoginModal() {
+            window.location.href = '/';
+        }
+
+        function showRegisterModal() {
+            window.location.href = '/';
+        }
+
+        function showAdminDashboard(section = '') {
+            window.location.href = '/admin' + (section ? '/' + section : '');
+        }
+
+        function showMyApplications() {
+            window.location.href = '/student-dashboard';
+        }
+
+        function viewMyPublicProfile() {
+            // Get current user data from session
+            fetch('/check-session')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.authenticated && data.user.public_profile_slug) {
+                        // Open public profile in new tab
+                        window.open(`/profile/${data.user.public_profile_slug}`, '_blank');
+                    } else {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Profile Not Ready',
+                            text: 'Please complete your profile setup first'
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching user data:', err);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Unable to load your profile'
+                    });
+                });
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear all storage
+                sessionStorage.clear();
+                localStorage.removeItem('isAdmin');
+                localStorage.removeItem('adminDashboardOpen');
+
+                fetch('/logout', { method: 'POST' })
+                    .then(() => {
+                        window.location.href = '/';
+                    });
+            }
+        }
+
+        async function loadJobs() {
+            try {
+                const response = await fetch('/api/job-postings');
+                const data = await response.json();
+                
+                allJobs = data.postings || [];
+                displayJobs(allJobs);
+                
+                document.getElementById('loadingSpinner').style.display = 'none';
+            } catch (error) {
+                console.error('Error loading jobs:', error);
+                document.getElementById('loadingSpinner').style.display = 'none';
+                Swal.fire('Error', 'Failed to load internships', 'error');
+            }
+        }
+
+        async function loadMyApplications() {
+            try {
+                const response = await fetch('/api/applications/my-applications');
+                const data = await response.json();
+                
+                appliedJobs = new Set(data.applications.map(app => app.job.id));
+            } catch (error) {
+                console.error('Error loading applications:', error);
+            }
+        }
+
+        function displayJobs(jobs) {
+            const container = document.getElementById('jobsContainer');
+            const noJobsMsg = document.getElementById('noJobsMessage');
+            
+            document.getElementById('jobCount').textContent = jobs.length;
+            
+            if (jobs.length === 0) {
+                container.innerHTML = '';
+                noJobsMsg.style.display = 'block';
+                return;
+            }
+            
+            noJobsMsg.style.display = 'none';
+            
+            container.innerHTML = jobs.map(job => {
+                const hasApplied = appliedJobs.has(job.id);
+                const stipendText = job.stipend_min && job.stipend_max 
+                    ? `₹${job.stipend_min.toLocaleString()} - ₹${job.stipend_max.toLocaleString()}/month`
+                    : job.salary_min && job.salary_max
+                    ? `₹${job.salary_min.toLocaleString()} - ₹${job.salary_max.toLocaleString()}/month`
+                    : 'Unpaid';
+                
+                return `
+                    <div class="job-card">
+                        <div class="d-flex gap-3">
+                            <div>
+                                <img src="${job.company.logo || 'https://via.placeholder.com/60'}" 
+                                     alt="${job.company.name}" 
+                                     class="company-logo"
+                                     onerror="this.src='https://via.placeholder.com/60?text=${job.company.name.charAt(0)}'">
+                            </div>
+                            <div class="flex-grow-1">
+                                <h3 class="job-title">${job.title}</h3>
+                                <div class="company-name">
+                                    <i class="fas fa-building me-2"></i>${job.company.name}
+                                </div>
+                                
+                                <div class="job-meta">
+                                    <div class="meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${job.location || 'Not specified'}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-clock"></i>
+                                        <span>${job.duration || 'Not specified'}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-laptop"></i>
+                                        <span>${job.employment_mode || 'Not specified'}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>${job.openings} opening(s)</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="job-tags">
+                                    <span class="tag primary">${job.job_type}</span>
+                                    ${job.skills_required.slice(0, 3).map(skill => 
+                                        `<span class="tag">${skill}</span>`
+                                    ).join('')}
+                                    ${job.skills_required.length > 3 ? 
+                                        `<span class="tag">+${job.skills_required.length - 3} more</span>` : ''}
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="stipend">${stipendText}</div>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-outline-primary" onclick="viewJobDetails(${job.id})">
+                                            <i class="fas fa-eye me-2"></i>View Details
+                                        </button>
+                                        <button class="btn btn-apply ${hasApplied ? 'applied' : ''}" 
+                                                onclick="applyToJob(${job.id})"
+                                                ${hasApplied ? 'disabled' : ''}>
+                                            <i class="fas ${hasApplied ? 'fa-check' : 'fa-paper-plane'} me-2"></i>
+                                            ${hasApplied ? 'Applied' : 'Apply Now'}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function applyFilters() {
+            const jobType = document.getElementById('jobTypeFilter').value;
+            const location = document.getElementById('locationFilter').value.toLowerCase();
+            const skills = document.getElementById('skillsFilter').value.toLowerCase().split(',').map(s => s.trim()).filter(s => s);
+            const workMode = document.getElementById('workModeFilter').value;
+            
+            let filtered = allJobs;
+            
+            if (jobType) {
+                filtered = filtered.filter(job => job.job_type === jobType);
+            }
+            
+            if (location) {
+                filtered = filtered.filter(job => 
+                    job.location && job.location.toLowerCase().includes(location)
+                );
+            }
+            
+            if (skills.length > 0) {
+                filtered = filtered.filter(job => 
+                    skills.some(skill => 
+                        job.skills_required.some(jobSkill => 
+                            jobSkill.toLowerCase().includes(skill)
+                        )
+                    )
+                );
+            }
+            
+            if (workMode) {
+                filtered = filtered.filter(job => job.employment_mode === workMode);
+            }
+            
+            // Update active filters count
+            const activeFilters = [jobType, location, workMode].filter(f => f).length + (skills.length > 0 ? 1 : 0);
+            const filterBadge = document.getElementById('activeFiltersCount');
+            const clearBtn = document.getElementById('clearFiltersBtn');
+            
+            if (activeFilters > 0) {
+                filterBadge.textContent = activeFilters;
+                filterBadge.style.display = 'inline-block';
+                clearBtn.style.display = 'inline';
+            } else {
+                filterBadge.style.display = 'none';
+                clearBtn.style.display = 'none';
+            }
+            
+            displayJobs(filtered);
+        }
+
+        function clearFilters() {
+            document.getElementById('jobTypeFilter').value = '';
+            document.getElementById('locationFilter').value = '';
+            document.getElementById('skillsFilter').value = '';
+            document.getElementById('workModeFilter').value = '';
+            applyFilters();
+        }
+
+        async function viewJobDetails(jobId) {
+            try {
+                const response = await fetch(`/api/job-postings/${jobId}`);
+                const job = await response.json();
+                
+                const hasApplied = appliedJobs.has(jobId);
+                
+                Swal.fire({
+                    title: job.title,
+                    html: `
+                        <div class="text-start">
+                            <h6 class="text-primary">${job.company.name}</h6>
+                            <p><strong>Location:</strong> ${job.location || 'Not specified'}</p>
+                            <p><strong>Job Type:</strong> ${job.job_type}</p>
+                            <p><strong>Work Mode:</strong> ${job.employment_mode || 'Not specified'}</p>
+                            <hr>
+                            <h6>Description:</h6>
+                            <p>${job.description}</p>
+                            <hr>
+                            <h6>Requirements:</h6>
+                            <ul>
+                                ${job.requirements.map(req => `<li>${req}</li>`).join('')}
+                            </ul>
+                            <hr>
+                            <h6>Skills Required:</h6>
+                            <p>${job.skills_required.join(', ')}</p>
+                        </div>
+                    `,
+                    width: 700,
+                    showCancelButton: !hasApplied,
+                    confirmButtonText: hasApplied ? 'Close' : 'Apply Now',
+                    confirmButtonColor: '#6C5CE7',
+                    cancelButtonText: 'Close'
+                }).then((result) => {
+                    if (result.isConfirmed && !hasApplied) {
+                        applyToJob(jobId);
+                    }
+                });
+            } catch (error) {
+                Swal.fire('Error', 'Failed to load job details', 'error');
+            }
+        }
+
+        async function applyToJob(jobId) {
+            const { value: coverLetter } = await Swal.fire({
+                title: 'Apply for this position',
+                html: `
+                    <textarea id="coverLetter" class="form-control" rows="5" 
+                              placeholder="Write a brief cover letter explaining why you're interested in this position..."></textarea>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'Submit Application',
+                confirmButtonColor: '#6C5CE7',
+                preConfirm: () => {
+                    return document.getElementById('coverLetter').value;
+                }
+            });
+
+            if (coverLetter !== undefined) {
+                try {
+                    const response = await fetch('/api/applications/apply', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            job_id: jobId,
+                            cover_letter: coverLetter
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        appliedJobs.add(jobId);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Application Submitted!',
+                            text: 'Your application has been submitted successfully',
+                            confirmButtonColor: '#6C5CE7'
+                        });
+                        displayJobs(allJobs); // Refresh to show "Applied" state
+                    } else {
+                        Swal.fire('Error', data.error || 'Failed to submit application', 'error');
+                    }
+                } catch (error) {
+                    Swal.fire('Error', 'An error occurred while submitting your application', 'error');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

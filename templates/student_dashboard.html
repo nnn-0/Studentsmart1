@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Applications - StudentsMart</title>
+    <link rel="icon" href="https://i.ibb.co/1YBpx2KS/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEC9;
+            --accent: #FD79A8;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --white: #FFFFFF;
+            --success: #00B894;
+            --warning: #FDCB6E;
+            --danger: #E17055;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #8B7CE9 50%, var(--accent) 100%);
+            color: white;
+            padding: 4rem 0 5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .page-header .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .page-header h1 i {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            opacity: 0.95;
+            font-weight: 400;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 2px solid rgba(108, 92, 231, 0.1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), #8B7CE9);
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(108, 92, 231, 0.2);
+            border-color: rgba(108, 92, 231, 0.3);
+        }
+
+        .stat-card.success::before {
+            background: linear-gradient(90deg, var(--success), #00d4a1);
+        }
+
+        .stat-card.warning::before {
+            background: linear-gradient(90deg, var(--warning), #ffeaa7);
+        }
+
+        .stat-card.danger::before {
+            background: linear-gradient(90deg, var(--danger), #ff7675);
+        }
+
+        .stat-card.info::before {
+            background: linear-gradient(90deg, var(--secondary), #00e5d4);
+        }
+
+        .stat-value {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #8B7CE9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-card.success .stat-value {
+            background: linear-gradient(135deg, var(--success), #00d4a1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card.warning .stat-value {
+            background: linear-gradient(135deg, var(--warning), #ffeaa7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card.danger .stat-value {
+            background: linear-gradient(135deg, var(--danger), #ff7675);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card.info .stat-value {
+            background: linear-gradient(135deg, var(--secondary), #00e5d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #636e72;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .stat-icon {
+            float: right;
+            font-size: 2.5rem;
+            opacity: 0.1;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            opacity: 0.15;
+            transform: scale(1.1);
+        }
+
+        /* Filter Tabs */
+        .filter-tabs {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(108, 92, 231, 0.1);
+            margin-bottom: 2.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.85rem 1.75rem;
+            border-radius: 12px;
+            background: var(--light);
+            color: var(--dark);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .filter-tab:hover {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, var(--primary), #8B7CE9);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        /* Application Cards */
+        .applications-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .application-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            border: 2px solid transparent;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .application-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .application-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .application-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(108, 92, 231, 0.2);
+            border-color: rgba(108, 92, 231, 0.3);
+        }
+
+        .application-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .company-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 3px solid rgba(108, 92, 231, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .application-card:hover .company-logo {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .job-info {
+            flex: 1;
+            margin-left: 1.5rem;
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.75rem;
+            transition: color 0.3s ease;
+        }
+
+        .application-card:hover .job-title {
+            color: var(--primary);
+        }
+
+        .company-name {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .meta-item i {
+            color: var(--primary);
+        }
+
+        .status-badge {
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-applied {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .status-in-review {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+        }
+
+        .status-shortlisted {
+            background: rgba(0, 206, 201, 0.1);
+            color: var(--secondary);
+        }
+
+        .status-accepted {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .status-rejected {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--danger);
+        }
+
+        .application-timeline {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--light);
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .timeline-text {
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .timeline-text strong {
+            color: var(--dark);
+        }
+
+        .application-actions {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #8B7CE9);
+            border: none;
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 15px;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: #636e72;
+            margin-bottom: 2rem;
+        }
+
+        /* Navbar Styles from index.html */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .logo-container img.logo {
+            height: 42px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo {
+            transform: rotate(8deg) scale(1.1);
+        }
+
+        .btn-nav-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-nav-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-outline-primary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggler-icon {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .navbar-toggler-icon span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-value {
+                font-size: 2rem;
+            }
+
+            .navbar-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <!-- Navigation Bar - Exact from index.html -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand" href="/" style="flex-grow: 1; max-width: 400px;">
+                <div class="logo-container">
+                    <img src="https://i.ibb.co/Z05RbY8/logo-removebg-preview-5.png"
+                        alt="StudentsMart - Learn.Sell.Repeat"
+                        class="logo">
+                </div>
+            </a>
+
+            <!-- Modern Hamburger Button -->
+            <button class="navbar-toggler" type="button" onclick="toggleMobileMenu()">
+                <div class="navbar-toggler-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+
+            <!-- Navigation Menu -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Navigation Links -->
+                <ul class="navbar-nav me-auto">
+                    <!-- Internships Button -->
+                    <li class="nav-item">
+                        <a class="nav-link btn-nav-box" href="/internships" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(108, 92, 231, 0.1); color: var(--primary); border-radius: 8px; font-weight: 600; transition: all 0.3s ease; border: 2px solid transparent;">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Internships</span>
+                        </a>
+                    </li>
+
+                    <!-- Companies Button -->
+                    <li class="nav-item">
+                        <a class="nav-link btn-nav-box" href="/companies" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1.2rem; background: rgba(0, 206, 201, 0.1); color: var(--secondary); border-radius: 8px; font-weight: 600; transition: all 0.3s ease; border: 2px solid transparent;">
+                            <i class="fas fa-building"></i>
+                            <span>Companies</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- User Navigation Items -->
+                <ul class="navbar-nav ms-auto">
+                    <!-- Admin Menu (Hidden by default) -->
+                    <li class="nav-item dropdown d-none" id="adminMenu">
+                        <a class="nav-link" href="#" onclick="showAdminDashboard()">
+                            <i class="fas fa-tools me-2"></i>Admin Dashboard
+                        </a>
+                    </li>
+
+                    <!-- Reports Menu (Hidden by default) -->
+                    <li class="nav-item d-none" id="reportsMenu">
+                        <a class="nav-link" href="#" onclick="showAdminDashboard('reports')">
+                            <i class="fas fa-flag me-2"></i>Reports
+                            <span class="badge bg-danger" id="navReportsBadge">0</span>
+                        </a>
+                    </li>
+
+                    <!-- Auth Buttons (Shown when logged out - Desktop only) -->
+                    <li class="nav-item" id="authButtons">
+                        <button class="btn btn-outline-primary me-2" onclick="showLoginModal()">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </button>
+                        <button class="btn btn-primary" onclick="showRegisterModal()">
+                            <i class="fas fa-user-plus me-2"></i>Register
+                        </button>
+                    </li>
+
+                    <!-- Notifications Menu (Hidden by default) -->
+                    <li class="nav-item d-none" id="notificationMenu">
+                        <a class="nav-link position-relative" href="/notifications">
+                            <i class="fas fa-bell"></i>
+                            <span id="notificationBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="display: none;">
+                                0
+                            </span>
+                            Notifications
+                        </a>
+                    </li>
+
+                    <!-- User Menu Dropdown (Hidden by default - Shown when logged in) -->
+                    <li class="nav-item dropdown d-none" id="userMenu">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i><span id="userName"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" onclick="showMyListings()">
+                                <i class="fas fa-list me-2"></i>My Listings
+                            </a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showWishlist()">
+                                <i class="fas fa-heart me-2"></i>Wishlist
+                            </a></li>
+                            <li><a class="dropdown-item" href="/profiledashboard">
+                                <i class="fas fa-user me-2"></i>Profile Dashboard
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logoutUser()">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="container">
+            <h1><i class="fas fa-clipboard-list me-3"></i>My Applications</h1>
+            <p>Track all your internship applications in one place</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Stats Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <i class="fas fa-paper-plane stat-icon"></i>
+                <div class="stat-value" id="totalApplied">0</div>
+                <div class="stat-label">Total Applied</div>
+            </div>
+            <div class="stat-card warning">
+                <i class="fas fa-clock stat-icon"></i>
+                <div class="stat-value" id="inReview">0</div>
+                <div class="stat-label">In Review</div>
+            </div>
+            <div class="stat-card info">
+                <i class="fas fa-star stat-icon"></i>
+                <div class="stat-value" id="shortlisted">0</div>
+                <div class="stat-label">Shortlisted</div>
+            </div>
+            <div class="stat-card success">
+                <i class="fas fa-check-circle stat-icon"></i>
+                <div class="stat-value" id="accepted">0</div>
+                <div class="stat-label">Accepted</div>
+            </div>
+            <div class="stat-card danger">
+                <i class="fas fa-times-circle stat-icon"></i>
+                <div class="stat-value" id="rejected">0</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <div class="filter-tab active" data-filter="all" onclick="filterApplications('all')">
+                <i class="fas fa-list me-2"></i>All Applications
+            </div>
+            <div class="filter-tab" data-filter="applied" onclick="filterApplications('applied')">
+                <i class="fas fa-paper-plane me-2"></i>Applied
+            </div>
+            <div class="filter-tab" data-filter="in-review" onclick="filterApplications('in-review')">
+                <i class="fas fa-clock me-2"></i>In Review
+            </div>
+            <div class="filter-tab" data-filter="shortlisted" onclick="filterApplications('shortlisted')">
+                <i class="fas fa-star me-2"></i>Shortlisted
+            </div>
+            <div class="filter-tab" data-filter="accepted" onclick="filterApplications('accepted')">
+                <i class="fas fa-check-circle me-2"></i>Accepted
+            </div>
+            <div class="filter-tab" data-filter="rejected" onclick="filterApplications('rejected')">
+                <i class="fas fa-times-circle me-2"></i>Rejected
+            </div>
+        </div>
+
+        <!-- Applications Grid -->
+        <div class="applications-grid" id="applicationsGrid">
+            <!-- Loading -->
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3 text-muted">Loading your applications...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allApplications = [];
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserInfo();
+            loadApplications();
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(event) {
+                const userMenu = document.getElementById('userDropdown');
+                const userAvatar = document.getElementById('userAvatar');
+                
+                if (userMenu && userAvatar && !userMenu.contains(event.target) && !userAvatar.contains(event.target)) {
+                    userMenu.classList.remove('show');
+                }
+            });
+        });
+
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/check-session');
+                const data = await response.json();
+
+                if (data.authenticated) {
+                    // Hide auth buttons, show user menu
+                    document.getElementById('authButtons').classList.add('d-none');
+                    document.getElementById('userMenu').classList.remove('d-none');
+
+                    // Set user name
+                    document.getElementById('userName').textContent = data.user.full_name;
+
+                    // Show admin menu if user is admin
+                    if (data.user.is_admin) {
+                        document.getElementById('adminMenu').classList.remove('d-none');
+                        document.getElementById('reportsMenu').classList.remove('d-none');
+                    }
+                } else {
+                    // Show auth buttons, hide user menu
+                    document.getElementById('authButtons').classList.remove('d-none');
+                    document.getElementById('userMenu').classList.add('d-none');
+                }
+            } catch (error) {
+                console.error('Error loading user info:', error);
+            }
+        }
+
+        function toggleMobileMenu() {
+            const navbarCollapse = document.getElementById('navbarNav');
+            navbarCollapse.classList.toggle('show');
+        }
+
+        function showLoginModal() {
+            window.location.href = '/';
+        }
+
+        function showRegisterModal() {
+            window.location.href = '/';
+        }
+
+        function showMyListings() {
+            window.location.href = '/';
+        }
+
+        function showWishlist() {
+            window.location.href = '/';
+        }
+
+        function showAdminDashboard(section = '') {
+            window.location.href = '/admin' + (section ? '/' + section : '');
+        }
+
+        function logoutUser() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear all storage
+                sessionStorage.clear();
+                localStorage.removeItem('isAdmin');
+                localStorage.removeItem('adminDashboardOpen');
+
+                fetch('/logout', { method: 'POST' })
+                    .then(() => window.location.href = '/')
+                    .catch(() => window.location.href = '/');
+            }
+        }
+
+        async function loadApplications() {
+            try {
+                const response = await fetch('/api/applications/my-applications');
+                const data = await response.json();
+                
+                allApplications = data.applications || [];
+                
+                updateStats();
+                displayApplications();
+            } catch (error) {
+                console.error('Error loading applications:', error);
+                document.getElementById('applicationsGrid').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <h3>Error Loading Applications</h3>
+                        <p>Failed to load your applications. Please try again.</p>
+                        <button class="btn btn-primary" onclick="location.reload()">
+                            <i class="fas fa-redo me-2"></i>Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('totalApplied').textContent = allApplications.length;
+            document.getElementById('inReview').textContent = allApplications.filter(a => a.status === 'in-review').length;
+            document.getElementById('shortlisted').textContent = allApplications.filter(a => a.status === 'shortlisted').length;
+            document.getElementById('accepted').textContent = allApplications.filter(a => a.status === 'accepted').length;
+            document.getElementById('rejected').textContent = allApplications.filter(a => a.status === 'rejected').length;
+        }
+
+        function displayApplications() {
+            const grid = document.getElementById('applicationsGrid');
+            
+            let filtered = allApplications;
+            if (currentFilter !== 'all') {
+                filtered = allApplications.filter(app => app.status === currentFilter);
+            }
+            
+            if (filtered.length === 0) {
+                const message = currentFilter === 'all' 
+                    ? "You haven't applied to any internships yet"
+                    : `No ${currentFilter} applications`;
+                
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h3>${message}</h3>
+                        <p>Start exploring internships and apply to opportunities that interest you!</p>
+                        <a href="/internships" class="btn btn-primary">
+                            <i class="fas fa-search me-2"></i>Browse Internships
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filtered.map(app => createApplicationCard(app)).join('');
+        }
+
+        function createApplicationCard(app) {
+            const statusClass = `status-${app.status}`;
+            const statusText = app.status.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+            
+            const appliedDate = new Date(app.applied_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+            
+            const reviewedDate = app.reviewed_at ? new Date(app.reviewed_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            }) : null;
+            
+            return `
+                <div class="application-card">
+                    <div class="application-header">
+                        <div class="d-flex" style="flex: 1;">
+                            <img src="${app.job.company_logo || 'https://via.placeholder.com/60'}" 
+                                 alt="${app.job.company_name}" 
+                                 class="company-logo"
+                                 onerror="this.src='https://via.placeholder.com/60?text=${app.job.company_name.charAt(0)}'">
+                            <div class="job-info">
+                                <h3 class="job-title">${app.job.title}</h3>
+                                <div class="company-name">
+                                    <i class="fas fa-building me-2"></i>${app.job.company_name}
+                                </div>
+                                <div class="job-meta">
+                                    <div class="meta-item">
+                                        <i class="fas fa-briefcase"></i>
+                                        <span>${app.job.job_type}</span>
+                                    </div>
+                                    <div class="meta-item">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>${app.job.location || 'Remote'}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
+                    
+                    ${app.cover_letter ? `
+                        <div class="mb-3">
+                            <strong class="d-block mb-2">Your Cover Letter:</strong>
+                            <p class="text-muted" style="font-style: italic;">"${app.cover_letter.substring(0, 150)}${app.cover_letter.length > 150 ? '...' : ''}"</p>
+                        </div>
+                    ` : ''}
+                    
+                    <div class="application-timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fas fa-paper-plane"></i>
+                            </div>
+                            <div class="timeline-text">
+                                <strong>Applied</strong> on ${appliedDate}
+                            </div>
+                        </div>
+                        
+                        ${reviewedDate ? `
+                            <div class="timeline-item">
+                                <div class="timeline-icon" style="background: ${getStatusColor(app.status)};">
+                                    <i class="fas ${getStatusIcon(app.status)}"></i>
+                                </div>
+                                <div class="timeline-text">
+                                    <strong>${statusText}</strong> on ${reviewedDate}
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="timeline-item">
+                                <div class="timeline-icon" style="background: var(--warning);">
+                                    <i class="fas fa-hourglass-half"></i>
+                                </div>
+                                <div class="timeline-text">
+                                    <strong>Waiting</strong> for company response
+                                </div>
+                            </div>
+                        `}
+                    </div>
+                    
+                    <div class="application-actions">
+                        <button class="btn btn-outline-primary" onclick="viewJobDetails(${app.job.id})">
+                            <i class="fas fa-eye me-2"></i>View Job Details
+                        </button>
+                        ${app.status === 'accepted' ? `
+                            <button class="btn btn-primary">
+                                <i class="fas fa-envelope me-2"></i>Contact Company
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'applied': 'var(--primary)',
+                'in-review': 'var(--warning)',
+                'shortlisted': 'var(--secondary)',
+                'accepted': 'var(--success)',
+                'rejected': 'var(--danger)'
+            };
+            return colors[status] || 'var(--primary)';
+        }
+
+        function getStatusIcon(status) {
+            const icons = {
+                'applied': 'fa-clock',
+                'in-review': 'fa-eye',
+                'shortlisted': 'fa-star',
+                'accepted': 'fa-check',
+                'rejected': 'fa-times'
+            };
+            return icons[status] || 'fa-question';
+        }
+
+        function filterApplications(filter) {
+            currentFilter = filter;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            
+            displayApplications();
+        }
+
+        async function viewJobDetails(jobId) {
+            try {
+                const response = await fetch(`/api/job-postings/${jobId}`);
+                const job = await response.json();
+                
+                Swal.fire({
+                    title: job.title,
+                    html: `
+                        <div class="text-start">
+                            <h6 class="text-primary">${job.company.name}</h6>
+                            <p><strong>Location:</strong> ${job.location || 'Not specified'}</p>
+                            <p><strong>Job Type:</strong> ${job.job_type}</p>
+                            <p><strong>Work Mode:</strong> ${job.employment_mode || 'Not specified'}</p>
+                            <hr>
+                            <h6>Description:</h6>
+                            <p>${job.description}</p>
+                            <hr>
+                            <h6>Requirements:</h6>
+                            <ul>
+                                ${job.requirements.map(req => `<li>${req}</li>`).join('')}
+                            </ul>
+                            <hr>
+                            <h6>Skills Required:</h6>
+                            <p>${job.skills_required.join(', ')}</p>
+                        </div>
+                    `,
+                    width: 700,
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#6C5CE7'
+                });
+            } catch (error) {
+                Swal.fire('Error', 'Failed to load job details', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

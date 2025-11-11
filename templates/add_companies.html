@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Companies Admin - StudentsMart</title>
+    <link rel="icon" href="https://i.ibb.co/1YBpx2KS/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEC9;
+            --accent: #FD79A8;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --white: #FFFFFF;
+            --success: #00B894;
+            --warning: #FDCB6E;
+            --danger: #E17055;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Admin Navbar */
+        .admin-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--accent);
+            color: white;
+            padding: 1rem 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--accent);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-label {
+            color: #636e72;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .tab {
+            padding: 0.75rem 2rem;
+            background: var(--light);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Companies Table */
+        .companies-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+
+        .table-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .companies-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .companies-table thead th {
+            background: var(--light);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--dark);
+            border: none;
+        }
+
+        .companies-table tbody tr {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .companies-table tbody tr:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .companies-table tbody td {
+            padding: 1rem;
+            border: none;
+            vertical-align: middle;
+        }
+
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid var(--light);
+        }
+
+        .company-name {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .company-email {
+            font-size: 0.85rem;
+            color: #636e72;
+        }
+
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+        }
+
+        .badge-danger {
+            background: rgba(225, 112, 85, 0.1);
+            color: var(--danger);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-view {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .modal-header {
+            background: var(--accent);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #636e72;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .job-card {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--accent);
+        }
+
+        .application-item {
+            background: var(--light);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .search-box {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--light);
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar">
+        <div class="navbar-container">
+            <a href="/super-admin" class="navbar-brand">
+                <i class="fas fa-building me-2"></i>
+                Companies Admin
+            </a>
+            <div class="navbar-menu">
+                <a href="/super-admin">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+                <a href="/super-admin/internships">
+                    <i class="fas fa-briefcase me-2"></i>Internships Admin
+                </a>
+                <a href="/">
+                    <i class="fas fa-home me-2"></i>Main Site
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-building me-3"></i>Companies Management
+            </h1>
+            <p class="text-muted mb-0">Approve companies, manage job postings, and monitor recruitment</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalCompanies">0</div>
+                <div class="stat-label">Total Companies</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="approvedCompanies">0</div>
+                <div class="stat-label">Approved</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="pendingCompanies">0</div>
+                <div class="stat-label">Pending Approval</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalJobPostings">0</div>
+                <div class="stat-label">Job Postings</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeJobs">0</div>
+                <div class="stat-label">Active Jobs</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('companies')">
+                    <i class="fas fa-building me-2"></i>All Companies
+                </button>
+                <button class="tab" onclick="showTab('pending')">
+                    <i class="fas fa-clock me-2"></i>Pending Approval
+                </button>
+                <button class="tab" onclick="showTab('jobs')">
+                    <i class="fas fa-briefcase me-2"></i>Job Postings
+                </button>
+            </div>
+        </div>
+
+        <!-- Companies Section -->
+        <div class="companies-container" id="companiesSection">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search companies by name or email..." onkeyup="searchCompanies()">
+            </div>
+            <h3 class="table-title">All Companies</h3>
+            <div class="table-responsive">
+                <table class="companies-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Size</th>
+                            <th>Job Postings</th>
+                            <th>Applications</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="companiesTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <p class="mt-3 text-muted">Loading companies...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pending Approval Section -->
+        <div class="companies-container" id="pendingSection" style="display: none;">
+            <h3 class="table-title">Pending Approval</h3>
+            <div class="table-responsive">
+                <table class="companies-table">
+                    <thead>
+                        <tr>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th>Registered</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Job Postings Section -->
+        <div class="companies-container" id="jobsSection" style="display: none;">
+            <h3 class="table-title">All Job Postings</h3>
+            <div class="table-responsive">
+                <table class="companies-table">
+                    <thead>
+                        <tr>
+                            <th>Job Title</th>
+                            <th>Company</th>
+                            <th>Type</th>
+                            <th>Applications</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jobsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Detail Modal -->
+    <div class="modal fade" id="companyModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="companyModalTitle">Company Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="companyModalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allCompanies = [];
+        let allJobPostings = [];
+        let currentTab = 'companies';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCompanies();
+            loadJobPostings();
+        });
+
+        async function loadCompanies() {
+            try {
+                const response = await fetch('/api/super-admin/companies/all');
+                const data = await response.json();
+                
+                allCompanies = data.companies || [];
+                updateStats();
+                displayCompanies();
+                displayPendingApprovals();
+            } catch (error) {
+                console.error('Error loading companies:', error);
+            }
+        }
+
+        async function loadJobPostings() {
+            try {
+                const response = await fetch('/api/super-admin/companies/job-postings');
+                const data = await response.json();
+                
+                allJobPostings = data.postings || [];
+                displayJobPostings();
+            } catch (error) {
+                console.error('Error loading job postings:', error);
+            }
+        }
+
+        function updateStats() {
+            const approved = allCompanies.filter(c => c.is_approved).length;
+            const pending = allCompanies.filter(c => !c.is_approved).length;
+            const activeJobs = allJobPostings.filter(j => j.status === 'active').length;
+            
+            document.getElementById('totalCompanies').textContent = allCompanies.length;
+            document.getElementById('approvedCompanies').textContent = approved;
+            document.getElementById('pendingCompanies').textContent = pending;
+            document.getElementById('totalJobPostings').textContent = allJobPostings.length;
+            document.getElementById('activeJobs').textContent = activeJobs;
+        }
+
+        function displayCompanies() {
+            const tbody = document.getElementById('companiesTableBody');
+            
+            if (allCompanies.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-5 text-muted">No companies found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = allCompanies.map(company => `
+                <tr>
+                    <td>
+                        <div class="company-info">
+                            <img src="${company.logo || 'https://via.placeholder.com/50'}" 
+                                 class="company-logo" 
+                                 onerror="this.src='https://via.placeholder.com/50?text=${company.company_name.charAt(0)}'">
+                            <div>
+                                <div class="company-name">${company.company_name}</div>
+                                <div class="company-email">${company.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${company.industry || 'N/A'}</td>
+                    <td>${company.company_size || 'N/A'}</td>
+                    <td><span class="badge badge-success">${company.job_postings_count}</span></td>
+                    <td><span class="badge badge-success">${company.total_applications}</span></td>
+                    <td>
+                        ${company.is_approved 
+                            ? '<span class="badge badge-success">Approved</span>' 
+                            : '<span class="badge badge-warning">Pending</span>'}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-view" onclick="viewCompanyDetails(${company.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${!company.is_approved ? `
+                                <button class="btn btn-sm btn-success" onclick="approveCompany(${company.id})">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-sm btn-danger" onclick="deleteCompany(${company.id}, '${company.company_name}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function displayPendingApprovals() {
+            const pending = allCompanies.filter(c => !c.is_approved);
+            const tbody = document.getElementById('pendingTableBody');
+            
+            if (pending.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-5 text-muted">No pending approvals</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = pending.map(company => `
+                <tr>
+                    <td>
+                        <div class="company-info">
+                            <img src="${company.logo || 'https://via.placeholder.com/50'}" class="company-logo">
+                            <div>
+                                <div class="company-name">${company.company_name}</div>
+                                <div class="company-email">${company.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${company.industry || 'N/A'}</td>
+                    <td>${new Date(company.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-success" onclick="approveCompany(${company.id})">
+                                <i class="fas fa-check me-2"></i>Approve
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="rejectCompany(${company.id})">
+                                <i class="fas fa-times me-2"></i>Reject
+                            </button>
+                            <button class="btn btn-sm btn-info" onclick="viewCompanyDetails(${company.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function displayJobPostings() {
+            const tbody = document.getElementById('jobsTableBody');
+            
+            if (allJobPostings.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-5 text-muted">No job postings found</td></tr>';
+                return;
+            }
+            
+            tbody.innerHTML = allJobPostings.map(job => `
+                <tr>
+                    <td><strong>${job.title}</strong></td>
+                    <td>${job.company.name}</td>
+                    <td><span class="badge badge-success">${job.job_type}</span></td>
+                    <td><span class="badge badge-success">${job.applications_count}</span></td>
+                    <td>
+                        <span class="badge ${job.status === 'active' ? 'badge-success' : 'badge-warning'}">
+                            ${job.status}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-info" onclick="viewJobApplications(${job.id})">
+                            <i class="fas fa-users me-2"></i>View Applications
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function showTab(tab) {
+            currentTab = tab;
+            
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.closest('.tab').classList.add('active');
+            
+            document.getElementById('companiesSection').style.display = tab === 'companies' ? 'block' : 'none';
+            document.getElementById('pendingSection').style.display = tab === 'pending' ? 'block' : 'none';
+            document.getElementById('jobsSection').style.display = tab === 'jobs' ? 'block' : 'none';
+        }
+
+        function searchCompanies() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = allCompanies.filter(c => 
+                c.company_name.toLowerCase().includes(query) || 
+                c.email.toLowerCase().includes(query)
+            );
+            
+            const tbody = document.getElementById('companiesTableBody');
+            tbody.innerHTML = filtered.map(company => `
+                <tr>
+                    <td>
+                        <div class="company-info">
+                            <img src="${company.logo || 'https://via.placeholder.com/50'}" class="company-logo">
+                            <div>
+                                <div class="company-name">${company.company_name}</div>
+                                <div class="company-email">${company.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${company.industry || 'N/A'}</td>
+                    <td>${company.company_size || 'N/A'}</td>
+                    <td><span class="badge badge-success">${company.job_postings_count}</span></td>
+                    <td><span class="badge badge-success">${company.total_applications}</span></td>
+                    <td>
+                        ${company.is_approved 
+                            ? '<span class="badge badge-success">Approved</span>' 
+                            : '<span class="badge badge-warning">Pending</span>'}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-view" onclick="viewCompanyDetails(${company.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${!company.is_approved ? `
+                                <button class="btn btn-sm btn-success" onclick="approveCompany(${company.id})">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            ` : ''}
+                            <button class="btn btn-sm btn-danger" onclick="deleteCompany(${company.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        async function approveCompany(companyId) {
+            try {
+                const response = await fetch(`/api/super-admin/companies/${companyId}/approve`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ approved: true })
+                });
+                
+                if (response.ok) {
+                    Swal.fire('Success', 'Company approved successfully', 'success');
+                    loadCompanies();
+                } else {
+                    Swal.fire('Error', 'Failed to approve company', 'error');
+                }
+            } catch (error) {
+                Swal.fire('Error', 'An error occurred', 'error');
+            }
+        }
+
+        async function rejectCompany(companyId) {
+            const result = await Swal.fire({
+                title: 'Reject Company?',
+                text: 'This will deny the company registration',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#E17055',
+                confirmButtonText: 'Yes, reject'
+            });
+            
+            if (result.isConfirmed) {
+                await deleteCompany(companyId);
+            }
+        }
+
+        async function deleteCompany(companyId, name) {
+            const result = await Swal.fire({
+                title: 'Delete Company?',
+                text: `This will permanently delete ${name || 'this company'} and all their job postings`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#E17055',
+                confirmButtonText: 'Yes, delete'
+            });
+            
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`/api/super-admin/companies/${companyId}/delete`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        Swal.fire('Deleted!', 'Company has been deleted', 'success');
+                        loadCompanies();
+                    } else {
+                        Swal.fire('Error', 'Failed to delete company', 'error');
+                    }
+                } catch (error) {
+                    Swal.fire('Error', 'An error occurred', 'error');
+                }
+            }
+        }
+
+        async function viewCompanyDetails(companyId) {
+            try {
+                const response = await fetch(`/api/super-admin/companies/${companyId}`);
+                const data = await response.json();
+                
+                document.getElementById('companyModalTitle').textContent = data.company.company_name;
+                document.getElementById('companyModalBody').innerHTML = generateCompanyDetailHTML(data);
+                
+                new bootstrap.Modal(document.getElementById('companyModal')).show();
+            } catch (error) {
+                Swal.fire('Error', 'Failed to load company details', 'error');
+            }
+        }
+
+        function generateCompanyDetailHTML(data) {
+            return `
+                <div class="detail-section">
+                    <h5 class="detail-title">Company Information</h5>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">${data.company.email}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Website</div>
+                            <div class="detail-value">${data.company.website || 'N/A'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Industry</div>
+                            <div class="detail-value">${data.company.industry || 'N/A'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Company Size</div>
+                            <div class="detail-value">${data.company.company_size || 'N/A'}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h5 class="detail-title">Job Postings (${data.job_postings.length})</h5>
+                    ${data.job_postings.map(job => `
+                        <div class="job-card">
+                            <strong>${job.title}</strong> - ${job.job_type}<br>
+                            <small class="text-muted">
+                                ${job.applications.length} applications • 
+                                Status: ${job.status} • 
+                                Posted: ${new Date(job.created_at).toLocaleDateString()}
+                            </small>
+                        </div>
+                    `).join('') || '<p class="text-muted">No job postings yet</p>'}
+                </div>
+            `;
+        }
+
+        async function viewJobApplications(jobId) {
+            try {
+                const response = await fetch(`/api/super-admin/companies/job-postings/${jobId}/applications`);
+                const data = await response.json();
+                
+                Swal.fire({
+                    title: data.job.title,
+                    html: `
+                        <h6>${data.job.company_name}</h6>
+                        <hr>
+                        <h6>Applications (${data.applications.length})</h6>
+                        ${data.applications.map(app => `
+                            <div class="application-item">
+                                <div>
+                                    <strong>${app.student.name}</strong><br>
+                                    <small>${app.student.college}</small>
+                                </div>
+                                <span class="badge badge-${app.status === 'accepted' ? 'success' : 'warning'}">
+                                    ${app.status}
+                                </span>
+                            </div>
+                        `).join('') || '<p class="text-muted">No applications yet</p>'}
+                    `,
+                    width: 700,
+                    confirmButtonText: 'Close'
+                });
+            } catch (error) {
+                Swal.fire('Error', 'Failed to load applications', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

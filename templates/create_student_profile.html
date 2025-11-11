@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Your Profile - StudentsMart</title>
+    <link rel="icon" href="https://i.ibb.co/1YBpx2KS/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEC9;
+            --accent: #FD79A8;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --white: #FFFFFF;
+            --success: #00B894;
+        }
+
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e9f3 100%);
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 2rem;
+        }
+
+        /* Modern Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .logo {
+            height: 42px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover .logo {
+            transform: rotate(8deg) scale(1.1);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+        }
+
+        .nav-link:hover {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-nav-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-nav-internships {
+            background: rgba(108, 92, 231, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-nav-internships:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .btn-nav-companies {
+            background: rgba(0, 206, 201, 0.1);
+            color: var(--secondary);
+        }
+
+        .btn-nav-companies:hover {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+
+        .container {
+            max-width: 900px;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 15px 60px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(108, 92, 231, 0.1);
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #8B7CE9 50%, var(--accent) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,128C672,107,768,85,864,90.7C960,96,1056,128,1152,133.3C1248,139,1344,117,1392,106.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: bottom;
+            opacity: 0.3;
+        }
+
+        .profile-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-header p {
+            opacity: 0.95;
+            margin: 0;
+            font-size: 1.15rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Progress Steps */
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 2.5rem 2rem;
+            background: linear-gradient(to bottom, #f8f9ff, white);
+            position: relative;
+            border-bottom: 1px solid rgba(108, 92, 231, 0.1);
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: var(--light);
+            transform: translateY(-50%);
+            z-index: 0;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--light);
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-weight: 700;
+            font-size: 1.3rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 4px solid var(--light);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, var(--primary), #8B7CE9);
+            color: white;
+            border-color: var(--primary);
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+        }
+
+        .step.completed .step-number {
+            background: linear-gradient(135deg, var(--success), #00CEB8);
+            color: white;
+            border-color: var(--success);
+            box-shadow: 0 6px 20px rgba(0, 184, 148, 0.3);
+        }
+
+        .step.completed .step-number::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+        }
+
+        .step-label {
+            font-size: 0.95rem;
+            color: #636e72;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .step.completed .step-label {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Form Steps */
+        .form-step {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(108, 92, 231, 0.15);
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: #5f50d4;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--dark);
+            border: none;
+        }
+
+        .btn-secondary:hover {
+            background: #dfe4ea;
+        }
+
+        /* Skills Tags */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .skill-tag {
+            background: var(--primary);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-tag .remove-skill {
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .skill-tag .remove-skill:hover {
+            opacity: 1;
+        }
+
+        /* Resume Upload */
+        .resume-upload-area {
+            border: 3px dashed var(--primary);
+            border-radius: 15px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(108, 92, 231, 0.05);
+        }
+
+        .resume-upload-area:hover {
+            background: rgba(108, 92, 231, 0.1);
+            border-color: var(--accent);
+        }
+
+        .resume-upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 2rem 2rem;
+        }
+
+        .list-group-item {
+            border-radius: 10px !important;
+            margin-bottom: 0.5rem;
+            border: 2px solid #e9ecef;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="navbar-brand" href="/">
+                <img src="https://i.ibb.co/Z05RbY8/logo-removebg-preview-5.png" alt="StudentsMart" class="logo">
+            </a>
+            <ul class="nav-links">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/internships" class="btn-nav-box btn-nav-internships"><i class="fas fa-briefcase"></i> Internships</a></li>
+                <li><a href="/companies" class="btn-nav-box btn-nav-companies"><i class="fas fa-building"></i> Companies</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="profile-card">
+            <!-- Header -->
+            <div class="profile-header">
+                <h1><i class="fas fa-user-graduate me-2"></i>Create Your Profile</h1>
+                <p>Complete your profile to start applying for internships</p>
+            </div>
+
+            <!-- Progress Steps -->
+            <div class="steps-container">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Method</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Experience</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Education</div>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-label">Skills & Links</div>
+                </div>
+                <div class="step" data-step="6">
+                    <div class="step-number">6</div>
+                    <div class="step-label">Review</div>
+                </div>
+            </div>
+
+            <!-- Form Steps -->
+            <form id="profileForm">
+                <!-- Step 1: Choose Method -->
+                <div class="form-step active" data-step="1">
+                    <h3 class="mb-4">How would you like to create your profile?</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card h-100" style="cursor: pointer;" onclick="chooseMethod('upload')">
+                                <div class="card-body text-center p-4">
+                                    <i class="fas fa-file-upload fa-4x text-primary mb-3"></i>
+                                    <h5>Upload Resume</h5>
+                                    <p class="text-muted">We'll auto-fill your profile from your resume (PDF only)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100" style="cursor: pointer;" onclick="chooseMethod('manual')">
+                                <div class="card-body text-center p-4">
+                                    <i class="fas fa-edit fa-4x text-success mb-3"></i>
+                                    <h5>Fill Manually</h5>
+                                    <p class="text-muted">Enter your information step by step</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Basic Info -->
+                <div class="form-step" data-step="2">
+                    <h3 class="mb-4">Basic Information</h3>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Professional Headline</label>
+                            <input type="text" class="form-control" name="headline" placeholder="e.g., Full Stack Developer | MERN Stack Enthusiast">
+                        </div>
+                        <div class="col-md-12">
+                            <label class="form-label">About You</label>
+                            <textarea class="form-control" name="bio" rows="4" placeholder="Write a brief bio about yourself, your interests, and career goals..."></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" name="phone" placeholder="+91 98765 43210">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control" name="location" placeholder="Hyderabad, Telangana">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Looking For</label>
+                            <select class="form-select" name="looking_for">
+                                <option value="">Select...</option>
+                                <option value="Internship">Internship</option>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Both">Both</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Available From</label>
+                            <input type="date" class="form-control" name="available_from">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Work Experience -->
+                <div class="form-step" data-step="3">
+                    <h3 class="mb-4">Work Experience</h3>
+                    <div id="experienceContainer">
+                        <!-- Dynamic experience entries will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="addExperience()">
+                        <i class="fas fa-plus me-2"></i>Add Experience
+                    </button>
+                </div>
+
+                <!-- Step 4: Education -->
+                <div class="form-step" data-step="4">
+                    <h3 class="mb-4">Education</h3>
+                    <div id="educationContainer">
+                        <!-- Dynamic education entries will be added here -->
+                    </div>
+                    <button type="button" class="btn btn-outline-primary w-100" onclick="addEducation()">
+                        <i class="fas fa-plus me-2"></i>Add Education
+                    </button>
+                </div>
+
+                <!-- Step 5: Skills & Links -->
+                <div class="form-step" data-step="5">
+                    <h3 class="mb-4">Skills & Social Links</h3>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Skills</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="skillInput" placeholder="Type a skill and press Enter">
+                                <button class="btn btn-primary" type="button" onclick="addSkill()">Add</button>
+                            </div>
+                            <div class="skills-container" id="skillsContainer"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fab fa-linkedin me-2"></i>LinkedIn</label>
+                            <input type="url" class="form-control" name="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fab fa-github me-2"></i>GitHub</label>
+                            <input type="url" class="form-control" name="github" placeholder="https://github.com/yourusername">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-globe me-2"></i>Portfolio</label>
+                            <input type="url" class="form-control" name="portfolio" placeholder="https://yourportfolio.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label"><i class="fas fa-code me-2"></i>LeetCode</label>
+                            <input type="url" class="form-control" name="leetcode" placeholder="https://leetcode.com/yourusername">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Review -->
+                <div class="form-step" data-step="6">
+                    <h3 class="mb-4">Review Your Profile</h3>
+                    <div id="reviewContent"></div>
+                    <div class="alert alert-info mt-3">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Once you submit, your profile will be visible to recruiters and you can start applying for jobs!
+                    </div>
+                </div>
+            </form>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons">
+                <button type="button" class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" style="display: none;">
+                    <i class="fas fa-arrow-left me-2"></i>Previous
+                </button>
+                <button type="button" class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">
+                    Next<i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentStep = 1;
+        let profileData = {
+            skills: [],
+            experiences: [],
+            educations: []
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            preloadExistingProfile();
+        });
+
+        async function preloadExistingProfile() {
+            try {
+                const res = await fetch('/api/student-profile');
+                if (!res.ok) return;
+                const data = await res.json();
+
+                // Update header to Edit mode
+                const headerTitle = document.querySelector('.profile-header h1');
+                if (headerTitle) headerTitle.innerHTML = '<i class="fas fa-user-edit me-2"></i>Edit Your Profile';
+
+                // Fill basic fields
+                const form = document.getElementById('profileForm');
+                if (data.profile) {
+                    const p = data.profile;
+                    setInputValue(form, 'headline', p.headline);
+                    setTextareaValue(form, 'bio', p.bio);
+                    setInputValue(form, 'phone', p.phone);
+                    setInputValue(form, 'location', p.location);
+                    setSelectValue(form, 'looking_for', p.looking_for);
+                    if (p.available_from) setInputValue(form, 'available_from', p.available_from);
+
+                    // Socials
+                    setInputValue(form, 'linkedin', p.linkedin);
+                    setInputValue(form, 'github', p.github);
+                    setInputValue(form, 'portfolio', p.portfolio);
+                    setInputValue(form, 'leetcode', p.leetcode);
+
+                    // Skills
+                    if (Array.isArray(p.skills)) {
+                        profileData.skills = p.skills;
+                        renderSkills();
+                    }
+                }
+            } catch (e) {
+                // Silent fail - treat as fresh create
+            }
+        }
+
+        function setInputValue(form, name, value) {
+            if (value == null) return;
+            const el = form.querySelector(`input[name="${name}"]`);
+            if (el) el.value = value;
+        }
+
+        function setTextareaValue(form, name, value) {
+            if (value == null) return;
+            const el = form.querySelector(`textarea[name="${name}"]`);
+            if (el) el.value = value;
+        }
+
+        function setSelectValue(form, name, value) {
+            if (value == null) return;
+            const el = form.querySelector(`select[name="${name}"]`);
+            if (el) el.value = value;
+        }
+
+        async function chooseMethod(method) {
+            if (method === 'upload') {
+                // Show file upload dialog
+                const { value: file } = await Swal.fire({
+                    title: 'Upload Your Resume',
+                    html: `
+                        <div style="text-align: left; padding: 1rem;">
+                            <p style="margin-bottom: 1.5rem; color: #636e72;">
+                                <i class="fas fa-info-circle" style="color: var(--primary);"></i>
+                                Upload your resume (PDF format) and we'll automatically extract your information.
+                            </p>
+                            <input type="file" id="resume-file" accept=".pdf" class="swal2-file" style="display: none;">
+                            <label for="resume-file" class="btn btn-primary w-100" style="cursor: pointer; padding: 1rem;">
+                                <i class="fas fa-cloud-upload-alt me-2"></i>
+                                Choose PDF File
+                            </label>
+                            <div id="file-name" style="margin-top: 1rem; color: var(--primary); font-weight: 600;"></div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Upload & Parse',
+                    cancelButtonText: 'Cancel',
+                    confirmButtonColor: '#6C5CE7',
+                    didOpen: () => {
+                        const fileInput = document.getElementById('resume-file');
+                        const fileNameDisplay = document.getElementById('file-name');
+
+                        fileInput.addEventListener('change', (e) => {
+                            if (e.target.files.length > 0) {
+                                fileNameDisplay.innerHTML = `<i class="fas fa-file-pdf me-2"></i>${e.target.files[0].name}`;
+                            }
+                        });
+                    },
+                    preConfirm: () => {
+                        const fileInput = document.getElementById('resume-file');
+                        if (!fileInput.files.length) {
+                            Swal.showValidationMessage('Please select a PDF file');
+                            return false;
+                        }
+                        return fileInput.files[0];
+                    }
+                });
+
+                if (file) {
+                    await uploadAndParseResume(file);
+                }
+            } else {
+                changeStep(1);
+            }
+        }
+
+        async function uploadAndParseResume(file) {
+            const formData = new FormData();
+            formData.append('resume', file);
+
+            Swal.fire({
+                title: 'Uploading Resume...',
+                html: '<div class="spinner-border text-primary" role="status"></div><p class="mt-3">Please wait while we extract your information</p>',
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+
+            try {
+                const response = await fetch('/api/student-profile/resume-upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Resume Uploaded!',
+                        html: `
+                            <p>Your resume has been uploaded successfully.</p>
+                            <p class="text-muted" style="font-size: 0.9rem;">
+                                Note: Automatic parsing is being enhanced. For now, please fill in your details manually.
+                            </p>
+                        `,
+                        confirmButtonText: 'Continue'
+                    }).then(() => {
+                        // TODO: Fill form with parsed data when parsing is implemented
+                        changeStep(1);
+                    });
+                } else {
+                    throw new Error(data.error || 'Upload failed');
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Upload Failed',
+                    text: error.message,
+                    confirmButtonText: 'Try Again'
+                });
+            }
+        }
+
+        function changeStep(direction) {
+            const steps = document.querySelectorAll('.form-step');
+            const stepIndicators = document.querySelectorAll('.step');
+            
+            // Validate current step before moving forward
+            if (direction === 1 && !validateStep(currentStep)) {
+                return;
+            }
+
+            // Hide current step
+            steps[currentStep - 1].classList.remove('active');
+            stepIndicators[currentStep - 1].classList.remove('active');
+            stepIndicators[currentStep - 1].classList.add('completed');
+
+            // Update step
+            currentStep += direction;
+
+            // Show new step
+            steps[currentStep - 1].classList.add('active');
+            stepIndicators[currentStep - 1].classList.add('active');
+
+            // Update buttons
+            document.getElementById('prevBtn').style.display = currentStep === 1 ? 'none' : 'block';
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentStep === steps.length) {
+                nextBtn.innerHTML = '<i class="fas fa-check me-2"></i>Submit Profile';
+                nextBtn.onclick = submitProfile;
+                // Show review
+                showReview();
+            } else {
+                nextBtn.innerHTML = 'Next<i class="fas fa-arrow-right ms-2"></i>';
+                nextBtn.onclick = () => changeStep(1);
+            }
+        }
+
+        function validateStep(step) {
+            // Add validation logic for each step
+            return true;
+        }
+
+        function addSkill() {
+            const input = document.getElementById('skillInput');
+            const skill = input.value.trim();
+            
+            if (skill && !profileData.skills.includes(skill)) {
+                profileData.skills.push(skill);
+                renderSkills();
+                input.value = '';
+            }
+        }
+
+        function removeSkill(skill) {
+            profileData.skills = profileData.skills.filter(s => s !== skill);
+            renderSkills();
+        }
+
+        function renderSkills() {
+            const container = document.getElementById('skillsContainer');
+            container.innerHTML = profileData.skills.map(skill => `
+                <span class="skill-tag">
+                    ${skill}
+                    <i class="fas fa-times remove-skill" onclick="removeSkill('${skill}')"></i>
+                </span>
+            `).join('');
+        }
+
+        function addExperience() {
+            const container = document.getElementById('experienceContainer');
+            const id = Date.now();
+            container.innerHTML += `
+                <div class="card mb-3" id="exp-${id}">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Company Name</label>
+                                <input type="text" class="form-control" name="company_${id}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Role/Position</label>
+                                <input type="text" class="form-control" name="role_${id}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Start Date</label>
+                                <input type="date" class="form-control" name="start_${id}" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">End Date</label>
+                                <input type="date" class="form-control" name="end_${id}">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check mt-4">
+                                    <input class="form-check-input" type="checkbox" name="current_${id}">
+                                    <label class="form-check-label">Currently Working</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" name="desc_${id}" rows="3"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn btn-sm btn-danger" onclick="document.getElementById('exp-${id}').remove()">
+                                    <i class="fas fa-trash me-2"></i>Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addEducation() {
+            const container = document.getElementById('educationContainer');
+            const id = Date.now();
+            container.innerHTML += `
+                <div class="card mb-3" id="edu-${id}">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Degree</label>
+                                <input type="text" class="form-control" name="degree_${id}" placeholder="e.g., B.Tech" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Institution</label>
+                                <input type="text" class="form-control" name="institution_${id}" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Field of Study</label>
+                                <input type="text" class="form-control" name="field_${id}" placeholder="e.g., Computer Science">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">CGPA</label>
+                                <input type="number" step="0.01" class="form-control" name="cgpa_${id}" placeholder="8.5">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Year</label>
+                                <input type="number" class="form-control" name="year_${id}" placeholder="2024">
+                            </div>
+                            <div class="col-12">
+                                <button type="button" class="btn btn-sm btn-danger" onclick="document.getElementById('edu-${id}').remove()">
+                                    <i class="fas fa-trash me-2"></i>Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showReview() {
+            const formData = new FormData(document.getElementById('profileForm'));
+            let html = '<div class="list-group">';
+            
+            html += `<div class="list-group-item">
+                <h5><i class="fas fa-user me-2"></i>Basic Info</h5>
+                <p><strong>Headline:</strong> ${formData.get('headline') || 'Not provided'}</p>
+                <p><strong>Bio:</strong> ${formData.get('bio') || 'Not provided'}</p>
+            </div>`;
+            
+            html += `<div class="list-group-item">
+                <h5><i class="fas fa-lightbulb me-2"></i>Skills</h5>
+                <div class="skills-container">${profileData.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>
+            </div>`;
+            
+            html += '</div>';
+            document.getElementById('reviewContent').innerHTML = html;
+        }
+
+        async function submitProfile() {
+            const formData = new FormData(document.getElementById('profileForm'));
+            
+            const profilePayload = {
+                headline: formData.get('headline'),
+                bio: formData.get('bio'),
+                phone: formData.get('phone'),
+                location: formData.get('location'),
+                looking_for: formData.get('looking_for'),
+                available_from: formData.get('available_from'),
+                skills: profileData.skills,
+                linkedin: formData.get('linkedin'),
+                github: formData.get('github'),
+                portfolio: formData.get('portfolio'),
+                leetcode: formData.get('leetcode'),
+                profile_completed: true
+            };
+
+            try {
+                const response = await fetch('/api/student-profile/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(profilePayload)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Profile Created!',
+                        text: 'Your profile has been created successfully',
+                        confirmButtonText: 'View Internships'
+                    }).then(() => {
+                        window.location.href = '/internships';
+                    });
+                } else {
+                    Swal.fire('Error', data.error || 'Failed to create profile', 'error');
+                }
+            } catch (error) {
+                Swal.fire('Error', 'An error occurred', 'error');
+            }
+        }
+
+        // Allow Enter key to add skills
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('skillInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addSkill();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

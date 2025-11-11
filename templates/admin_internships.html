@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internships Admin - StudentsMart</title>
+    <link rel="icon" href="https://i.ibb.co/1YBpx2KS/logo.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEC9;
+            --accent: #FD79A8;
+            --dark: #2D3436;
+            --light: #F5F6FA;
+            --white: #FFFFFF;
+            --success: #00B894;
+            --warning: #FDCB6E;
+            --danger: #E17055;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        /* Admin Navbar */
+        .admin-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--secondary);
+            color: white;
+            padding: 1rem 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+
+        .navbar-menu {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .navbar-menu a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .page-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-label {
+            color: #636e72;
+            font-weight: 600;
+        }
+
+        /* Search and Filters */
+        .controls-bar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--light);
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #00b8b3;
+            transform: translateY(-2px);
+        }
+
+        .btn-export {
+            background: var(--success);
+            color: white;
+        }
+
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--light);
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        /* Students Table */
+        .students-container {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .table-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.5rem;
+        }
+
+        .students-table thead th {
+            background: var(--light);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            color: var(--dark);
+            border: none;
+        }
+
+        .students-table tbody tr {
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .students-table tbody tr:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .students-table tbody td {
+            padding: 1rem;
+            border: none;
+            vertical-align: middle;
+        }
+
+        .student-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .student-name {
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .student-email {
+            font-size: 0.85rem;
+            color: #636e72;
+        }
+
+        .badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: rgba(0, 184, 148, 0.1);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(253, 203, 110, 0.1);
+            color: var(--warning);
+        }
+
+        .skills-preview {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .skill-tag {
+            background: var(--light);
+            color: var(--dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .btn-view {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-profile {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 15px;
+            border: none;
+        }
+
+        .modal-header {
+            background: var(--secondary);
+            color: white;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-title {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            font-size: 0.85rem;
+            color: #636e72;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .timeline-item {
+            background: var(--light);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 2px solid var(--light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .page-btn:hover, .page-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Navbar -->
+    <nav class="admin-navbar">
+        <div class="navbar-container">
+            <a href="/super-admin" class="navbar-brand">
+                <i class="fas fa-briefcase me-2"></i>
+                Internships Admin
+            </a>
+            <div class="navbar-menu">
+                <a href="/super-admin">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+                <a href="/super-admin/companies">
+                    <i class="fas fa-building me-2"></i>Companies Admin
+                </a>
+                <a href="/">
+                    <i class="fas fa-home me-2"></i>Main Site
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">
+                    <i class="fas fa-users-cog me-3"></i>Internships Management
+                </h1>
+                <p class="text-muted mb-0">Manage student profiles and applications</p>
+            </div>
+            <button class="btn btn-export" onclick="exportStudents()">
+                <i class="fas fa-download me-2"></i>Export Data
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalStudents">0</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="completedProfiles">0</div>
+                <div class="stat-label">Completed Profiles</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalApplications">0</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="activeApplications">0</div>
+                <div class="stat-label">Active Applications</div>
+            </div>
+        </div>
+
+        <!-- Search and Filters -->
+        <div class="controls-bar">
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Search by name, email, college, or skills..." onkeyup="searchStudents()">
+                <button class="btn btn-primary" onclick="searchStudents()">
+                    <i class="fas fa-search me-2"></i>Search
+                </button>
+            </div>
+            <div class="filters-row">
+                <select class="filter-select" id="collegeFilter" onchange="applyFilters()">
+                    <option value="">All Colleges</option>
+                </select>
+                <select class="filter-select" id="statusFilter" onchange="applyFilters()">
+                    <option value="">All Status</option>
+                    <option value="completed">Completed Profile</option>
+                    <option value="incomplete">Incomplete Profile</option>
+                </select>
+                <select class="filter-select" id="applicationsFilter" onchange="applyFilters()">
+                    <option value="">All Applications</option>
+                    <option value="has_applications">Has Applications</option>
+                    <option value="no_applications">No Applications</option>
+                </select>
+                <button class="btn btn-primary" onclick="clearFilters()">
+                    <i class="fas fa-times me-2"></i>Clear Filters
+                </button>
+            </div>
+        </div>
+
+        <!-- Students Table -->
+        <div class="students-container">
+            <div class="table-header">
+                <h3 class="table-title">Student Profiles</h3>
+                <div class="text-muted">
+                    Showing <span id="showingCount">0</span> of <span id="totalCount">0</span> students
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="students-table">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>College</th>
+                            <th>Skills</th>
+                            <th>Applications</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <p class="mt-3 text-muted">Loading students...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+
+    <!-- Student Detail Modal -->
+    <div class="modal fade" id="studentModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="studentModalTitle">Student Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="studentModalBody">
+                    <!-- Content loaded dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let allStudents = [];
+        let filteredStudents = [];
+        let currentPage = 1;
+        const studentsPerPage = 20;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStudents();
+        });
+
+        async function loadStudents() {
+            try {
+                const response = await fetch('/api/super-admin/internships/students');
+                const data = await response.json();
+                
+                allStudents = data.students || [];
+                filteredStudents = [...allStudents];
+                
+                updateStats();
+                populateCollegeFilter();
+                displayStudents();
+            } catch (error) {
+                console.error('Error loading students:', error);
+                document.getElementById('studentsTableBody').innerHTML = `
+                    <tr><td colspan="6" class="text-center text-danger py-5">
+                        <i class="fas fa-exclamation-circle fa-3x mb-3"></i>
+                        <p>Error loading students. Please refresh the page.</p>
+                    </td></tr>
+                `;
+            }
+        }
+
+        function updateStats() {
+            const completedProfiles = allStudents.filter(s => s.profile.profile_completed).length;
+            const totalApps = allStudents.reduce((sum, s) => sum + s.applications_count, 0);
+            
+            document.getElementById('totalStudents').textContent = allStudents.length;
+            document.getElementById('completedProfiles').textContent = completedProfiles;
+            document.getElementById('totalApplications').textContent = totalApps;
+            document.getElementById('activeApplications').textContent = totalApps;
+        }
+
+        function populateCollegeFilter() {
+            const colleges = [...new Set(allStudents.map(s => s.user.college))].sort();
+            const select = document.getElementById('collegeFilter');
+            colleges.forEach(college => {
+                const option = document.createElement('option');
+                option.value = college;
+                option.textContent = college;
+                select.appendChild(option);
+            });
+        }
+
+        function displayStudents() {
+            const start = (currentPage - 1) * studentsPerPage;
+            const end = start + studentsPerPage;
+            const pageStudents = filteredStudents.slice(start, end);
+            
+            document.getElementById('showingCount').textContent = pageStudents.length;
+            document.getElementById('totalCount').textContent = filteredStudents.length;
+            
+            const tbody = document.getElementById('studentsTableBody');
+            
+            if (pageStudents.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="6" class="text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No students found</p>
+                    </td></tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = pageStudents.map(student => {
+                const initials = student.user.full_name.split(' ').map(n => n[0]).join('');
+                const skills = student.profile.skills.slice(0, 3);
+                const statusBadge = student.profile.profile_completed 
+                    ? '<span class="badge badge-success">Complete</span>'
+                    : '<span class="badge badge-warning">Incomplete</span>';
+                
+                return `
+                    <tr>
+                        <td>
+                            <div class="student-info">
+                                <div class="student-avatar">${initials}</div>
+                                <div>
+                                    <div class="student-name">${student.user.full_name}</div>
+                                    <div class="student-email">${student.user.email}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="student-name">${student.user.college}</div>
+                            <div class="student-email">${student.user.department} • Year ${student.user.year}</div>
+                        </td>
+                        <td>
+                            <div class="skills-preview">
+                                ${skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                                ${student.profile.skills.length > 3 ? `<span class="skill-tag">+${student.profile.skills.length - 3}</span>` : ''}
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge badge-success">${student.applications_count}</span>
+                        </td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-sm btn-view" onclick="viewStudentDetails(${student.user_id})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <a href="${student.public_profile_link}" target="_blank" class="btn btn-sm btn-profile">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            renderPagination();
+        }
+
+        function searchStudents() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!query) {
+                filteredStudents = [...allStudents];
+            } else {
+                filteredStudents = allStudents.filter(student => 
+                    student.user.full_name.toLowerCase().includes(query) ||
+                    student.user.email.toLowerCase().includes(query) ||
+                    student.user.college.toLowerCase().includes(query) ||
+                    student.profile.skills.some(skill => skill.toLowerCase().includes(query))
+                );
+            }
+            
+            currentPage = 1;
+            displayStudents();
+        }
+
+        function applyFilters() {
+            const college = document.getElementById('collegeFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            const applications = document.getElementById('applicationsFilter').value;
+            
+            filteredStudents = allStudents.filter(student => {
+                if (college && student.user.college !== college) return false;
+                if (status === 'completed' && !student.profile.profile_completed) return false;
+                if (status === 'incomplete' && student.profile.profile_completed) return false;
+                if (applications === 'has_applications' && student.applications_count === 0) return false;
+                if (applications === 'no_applications' && student.applications_count > 0) return false;
+                return true;
+            });
+            
+            currentPage = 1;
+            displayStudents();
+        }
+
+        function clearFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('collegeFilter').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('applicationsFilter').value = '';
+            filteredStudents = [...allStudents];
+            currentPage = 1;
+            displayStudents();
+        }
+
+        async function viewStudentDetails(userId) {
+            try {
+                const response = await fetch(`/api/super-admin/internships/student/${userId}`);
+                const data = await response.json();
+                
+                document.getElementById('studentModalTitle').textContent = data.user.full_name;
+                document.getElementById('studentModalBody').innerHTML = generateDetailHTML(data);
+                
+                new bootstrap.Modal(document.getElementById('studentModal')).show();
+            } catch (error) {
+                Swal.fire('Error', 'Failed to load student details', 'error');
+            }
+        }
+
+        function generateDetailHTML(data) {
+            return `
+                <div class="detail-section">
+                    <h5 class="detail-title">Basic Information</h5>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Email</div>
+                            <div class="detail-value">${data.user.email}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">${data.profile.phone || 'Not provided'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">College</div>
+                            <div class="detail-value">${data.user.college}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Department</div>
+                            <div class="detail-value">${data.user.department}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h5 class="detail-title">Skills (${data.profile.skills.length})</h5>
+                    <div class="skills-preview">
+                        ${data.profile.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <h5 class="detail-title">Work Experience (${data.work_experiences.length})</h5>
+                    ${data.work_experiences.map(exp => `
+                        <div class="timeline-item">
+                            <strong>${exp.role}</strong> at ${exp.company}<br>
+                            <small class="text-muted">${exp.duration_start} - ${exp.currently_working ? 'Present' : exp.duration_end}</small>
+                        </div>
+                    `).join('') || '<p class="text-muted">No work experience added</p>'}
+                </div>
+                
+                <div class="detail-section">
+                    <h5 class="detail-title">Applications (${data.applications.length})</h5>
+                    ${data.applications.map(app => `
+                        <div class="timeline-item">
+                            <strong>${app.job_title}</strong> at ${app.company_name}<br>
+                            <small class="text-muted">Status: ${app.status} • Applied: ${app.applied_at}</small>
+                        </div>
+                    `).join('') || '<p class="text-muted">No applications yet</p>'}
+                </div>
+            `;
+        }
+
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+            
+            let html = '';
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            pagination.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            displayStudents();
+        }
+
+        async function exportStudents() {
+            try {
+                const response = await fetch('/api/super-admin/internships/export-students');
+                const data = await response.json();
+                
+                const blob = new Blob([JSON.stringify(data.students, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `students_export_${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                
+                Swal.fire('Success', 'Student data exported successfully', 'success');
+            } catch (error) {
+                Swal.fire('Error', 'Failed to export data', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
